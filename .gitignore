@@ -74,3 +74,8 @@ typings/
 
 # FuseBox cache
 .fusebox/
+.Rproj.user
+
+
+# Dev 
+/dev
