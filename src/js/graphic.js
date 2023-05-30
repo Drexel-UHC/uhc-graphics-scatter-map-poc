@@ -310,8 +310,8 @@ function init() {
 						let extent = {
 							'type': 'Feature',
 							'geometry': {
-							'type': 'Polygon',
-							'coordinates': [[[40, 70], [39, 76], [39, 74], [40, 75]]]
+								'type': 'Polygon',
+								'coordinates': [[[-76.1, 40.73], [-74.475, 40.73], [-76.1, 39.29], [-74.475, 39.29]]]
 							// 'coordinates': [[[0, 70], [35, 70], [0, 35], [35, 35]]]
 							}
 						}
