@@ -1,46 +1,121 @@
-library(dplyr)
-library(eurostat)
-library(geojsonio)
-library(sf)
+{ # Setup -------------------------------------------------------------------
 
-##REGIONAL GDP
-#Get the data from Eurostat. The database code for regional gdp is nama_10r_2gdp (see http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=nama_10r_2gdp)
-gdp.nuts2 <- get_eurostat("nama_10r_2gdp")
+  ## objects
+  year <- 2020
+  
+  ## xwalk_county_zcta
+  load("clean/zcta-count-sf.rdata")
+  vec__counties = names(list_sf_counties)
+  xwalk_county_zcta = vec__counties %>% 
+    map_df(~{
+      vec__zcta = list_sf_zcta[[.x]] %>% as.data.frame() %>% pull(zcta)
+      df_county = list_sf_counties[[.x]] %>% as.data.frame() %>% select(name = NAME, fips = GEOID)
+      tibble(county = df_county$name,
+             fip = df_county$fip,
+             zcta = vec__zcta)
+    }) %>% 
+    group_by(zcta) %>% 
+    slice(1) %>% 
+    ungroup()
+  
+  ## imports
+  load("clean/sf_county_prccsa_simp.rdata")
+  load("clean/zcta-count-sf.rdata")
+  
+}
 
-#We are only interested in de data expressed in purchasing power standard (PPS) per inhabitant in percentage of the EU average
-pps.ind <- filter(gdp.nuts2, unit == "PPS_HAB_EU")
+{ # ACS data ---------------------------------------------------------------
+  df_acs  <- get_acs(geography = "zcta", 
+                     variables = "B19013_001", 
+                     year = year) %>% 
+    select(zcta = GEOID, median_income = estimate)
+  
+  df_income =   df_acs %>% 
+    filter(zcta%in%xwalk_county_zcta$zcta) %>% 
+    left_join(xwalk_county_zcta) %>% 
+    filter(!is.na(median_income)) %>% 
+    rename(gdppps17 = median_income)
+  
+  df_county = df_income %>% 
+    group_by(county,fip) %>% 
+    summarize(gdppps17 = median(gdppps17)) %>% 
+    ungroup()  
+}
 
-#Regions have a 4 character ID in the geo column
-pps.ind.nuts2 <- filter(pps.ind, nchar(as.character(geo)) == 4)
+{ # Boundaries -------------------------------------------------------------------------
+  { # land --------------------------------------------------------------------
+    
+    sf_land <- states(cb = TRUE, 
+                      resolution = "20m", 
+                      class = "sf") %>%
+      filter(STUSPS == "PA") %>% 
+      mutate(FID = 1) %>% 
+      select(FID)
+    
+    sf_land %>% 
+      leaflet() %>% 
+      addTiles() %>% 
+      addPolygons()
+  }
+  
+  
+  { # county ------------------------------------------------------------------
+    sf_county = sf_county_prccsa_simp %>% 
+      select(fip = GEOID) %>% 
+      left_join(df_county) %>% 
+      mutate(id = county,
+             CNTR_CODE = county,
+             NUTS_NAME = county,
+             LEVL_CODE = 0,
+             FID = county,
+             NUTS_ID = county,
+             geo = county) %>% 
+      select(id, CNTR_CODE, NUTS_NAME, LEVL_CODE,
+             FID, NUTS_ID, geo, gdppps17)
+    
+    
+    sf_county %>% 
+      leaflet() %>% 
+      addTiles() %>% 
+      addPolygons()
+  }
+  
+  load("clean/sf_zcta_prccsa.rdata")
+  
+  { # zcta --------------------------------------------------------------------
+    load("clean/sf_zcta_prccsa.rdata")
+    
+    sf_zcta = sf_zcta_prccsa %>% 
+      left_join(df_income) %>% 
+      filter(!is.na(gdppps17)) %>% 
+      left_join(xwalk_county_zcta) %>% 
+      mutate(zcta_name = glue("ZCTA {zcta}")) %>% 
+      mutate(id = zcta,
+             CNTR_CODE = county,
+             NUTS_NAME = zcta_name,
+             LEVL_CODE = 2,
+             FID = zcta,
+             NUTS_ID = zcta,
+             geo = zcta) %>% 
+      select(id, CNTR_CODE, NUTS_NAME, LEVL_CODE,
+             FID, NUTS_ID, geo, gdppps17)
+      
+    sf_zcta %>% 
+      leaflet() %>% 
+      addTiles() %>% 
+      addPolygons()
+    
+  }
+  
+}
 
-#Filter out the most recent data, get rid of all the unneeded columns, change column names and write csv file
-pps.17 <- filter(pps.ind.nuts2, time == "2017-01-01") %>% select(geo, values)
-colnames(pps.17) <- c("geo", "gdppps17")
-write.csv(pps.17, file = "gdp_nuts2_17_test.csv", row.names = FALSE)
+{ # Export ------------------------------------------------------------------
 
-##COUNTRY GDP
-#Countries have a 2 character ID in the geo column
-pps.17.nuts0 <- filter(pps.ind, nchar(as.character(geo)) == 2, time == "2017-01-01") %>% select(geo, values)
-colnames(pps.17.nuts0) <- c("geo", "gdppps17")
-write.csv(pps.17.nuts0, file = "gdp_nuts0_17_test.csv", row.names = FALSE)
+  sf_land %>%  st_write("sf_land.geojson", driver = "GeoJSON")
+  sf_county %>%  st_write("sf_county.geojson", driver = "GeoJSON")
+  sf_zcta %>%  st_write("sf_zcta.geojson", driver = "GeoJSON")
+  
+}
 
-##GEODATA
-#Get the NUTS2016 of NUTS level 2 regions, at scale 1:20M
-#Data can also be downloaded from here: https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts
-regions.16 <- get_eurostat_geospatial(output_class = "sf", resolution = "20", nuts_level = "2", year = "2016")
-#Join the gdp data to the geodata
-regions.16.joined <- left_join(regions.16, pps.17, by = c("NUTS_ID" = "geo"))
-#Filter out non-EU regions
-outside <- c("AL", "CH", "LI", "ME", "IS", "NO", "TR", "MK", "RS")
-regions.16.joined <- filter(regions.16.joined, !(CNTR_CODE %in% outside))
-#Write the toposjon file
-topojson_write(regions.16.joined, file = "nuts2_gdppps17_topo.json")
 
-#Countries are NUTS level 0
-countries.16 <- get_eurostat_geospatial(output_class = "sf", resolution = "20", nuts_level = "0", year = "2016")
-#Join the gdp data to the geodata
-countries.16.joined <- left_join(countries.16, pps.17.nuts0, by = c("NUTS_ID" = "geo"))
-#Filter out non-EU countries
-countries.16.joined <- filter(countries.16.joined, !(CNTR_CODE %in% outside))
-#Write the toposjon file
-topojson_write(countries.16.joined, file = "nuts0_gdppps17_topo.json")
+
