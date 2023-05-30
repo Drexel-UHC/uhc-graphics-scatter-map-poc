@@ -1,14 +1,14 @@
 {
-  "title": "Why EU Regions are Redrawing Their Borders",
-  "description": "The EU dedicates a third of its budget to less economically developed regions for investments in infrastructure. Yet when regions improve economically, they no longer qualify for the same amount of funding. As a type of statistical gerrymandering, governors of these regions have redrawn their borders in order to keep the money flowing.",
-  "url": "https://pudding.cool/2019/04/eu-regions/",
-  "keywords": "european union,money,investment",
-  "imgFacebook": "https://pudding.cool/2019/04/eu-regions/assets/social/social-facebook.png",
-  "imgTwitter": "https://pudding.cool/2019/04/eu-regions/assets/social/social-twitter.png",
+  "title": "Philadelphia MAUP",
+  "description": "Explore MAUP i Philadelphia.",
+  "url": "https://drexel-uhc.github.io/analytics-corner/",
+  "keywords": "philadelphia,maup",
+  "imgFacebook": "https://www.facebook.com/phillyhealth/",
+  "imgTwitter": "https://twitter.com/PHLPublicHealth?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor",
   "author": {
-    "name": "Maarten Lambrechts",
-    "url": "https://pudding.cool/author/maarten-lambrechts/",
-    "twitterHandle": "@maartenzam"
+    "name": "UHC Graphics",
+    "url": "https://drexel-uhc.github.io/analytics-corner/",
+    "twitterHandle": "@DrexelUHC"
   },
-  "analytics": "UA-90567923-1"
+  "analytics": "XXX"
 }
