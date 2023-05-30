@@ -107,14 +107,24 @@
     
   }
   
+  { # dummy capital -----------------------------------------------------------
+    sf_capitals = sf_zcta %>% 
+      group_by(CNTR_CODE) %>% 
+      filter(gdppps17 == max(gdppps17)) %>% 
+      ungroup() %>% 
+      mutate(name = glue("{CNTR_CODE} Capital Name")) %>% 
+      select(name, NUTS_ID, CNTR_CODE, gdppps17) %>% 
+      st_centroid()
+  }
+  
 }
 
 { # Export ------------------------------------------------------------------
 
-  sf_land %>%  st_write("sf_land.geojson", driver = "GeoJSON")
-  sf_county %>%  st_write("sf_county.geojson", driver = "GeoJSON")
-  sf_zcta %>%  st_write("sf_zcta.geojson", driver = "GeoJSON")
-  
+  sf_land %>% st_write("sf_land.geojson", driver = "GeoJSON")
+  sf_county %>% st_write("sf_county.geojson", driver = "GeoJSON")
+  sf_zcta %>% st_write("sf_zcta.geojson", driver = "GeoJSON")
+  sf_capitals  %>% st_write("sf_capital.geojson", driver = "GeoJSON")
 }
 
 

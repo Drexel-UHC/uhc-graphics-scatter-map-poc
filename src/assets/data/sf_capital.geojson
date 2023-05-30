@@ -1,0 +1,13 @@
+{
+"type": "FeatureCollection",
+"name": "sf_capital",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4269" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Philadelphia Capital Name", "NUTS_ID": "19106", "CNTR_CODE": "Philadelphia", "gdppps17": 116368.0 }, "geometry": { "type": "Point", "coordinates": [ -75.143150201155819, 39.948513663922824 ] } },
+{ "type": "Feature", "properties": { "name": "Bucks Capital Name", "NUTS_ID": "18977", "CNTR_CODE": "Bucks", "gdppps17": 190202.0 }, "geometry": { "type": "Point", "coordinates": [ -74.880613494944697, 40.287220964414033 ] } },
+{ "type": "Feature", "properties": { "name": "Montgomery Capital Name", "NUTS_ID": "19035", "CNTR_CODE": "Montgomery", "gdppps17": 250001.0 }, "geometry": { "type": "Point", "coordinates": [ -75.281509758188676, 40.049176741439609 ] } },
+{ "type": "Feature", "properties": { "name": "Delaware Capital Name", "NUTS_ID": "19319", "CNTR_CODE": "Delaware", "gdppps17": 246583.0 }, "geometry": { "type": "Point", "coordinates": [ -75.520501374451129, 39.928289992852783 ] } },
+{ "type": "Feature", "properties": { "name": "Chester Capital Name", "NUTS_ID": "19425", "CNTR_CODE": "Chester", "gdppps17": 177641.0 }, "geometry": { "type": "Point", "coordinates": [ -75.64636623678372, 40.102218734771689 ] } },
+{ "type": "Feature", "properties": { "name": "Montgomery Capital Name", "NUTS_ID": "19085", "CNTR_CODE": "Montgomery", "gdppps17": 250001.0 }, "geometry": { "type": "Point", "coordinates": [ -75.349574821306575, 40.037328283126236 ] } }
+]
+}
