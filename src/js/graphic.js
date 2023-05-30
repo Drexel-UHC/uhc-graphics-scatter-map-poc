@@ -28,8 +28,8 @@ function init() {
 		.attr("d", "M 0 0 12 6 0 12 3 6")
 		.style("fill", "black");
 
-	let projection = d3.geoAzimuthalEqualArea()
-		.rotate([-10,-52,0]);
+	let projection = d3.geoMercator()
+
 
 	let path = d3.geoPath()
 		.projection(projection);
