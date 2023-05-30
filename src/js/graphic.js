@@ -37,34 +37,11 @@ function init() {
 	let flagsBuilt = false;
 
 	const emojiflags = {
-		"LU": "<tspan class='countryname'>Luxembourg </tspan>🇱🇺",
-		"IE": "<tspan class='countryname'>Ireland </tspan>🇮🇪",
-		"NL": "<tspan class='countryname'>Netherlands </tspan>🇳🇱",
-		"AT": "<tspan class='countryname'>Austria </tspan>🇦🇹",
-		"DE": "<tspan class='countryname'>Germany </tspan>🇩🇪",
-		"DK": "<tspan class='countryname'>Denmark </tspan>🇩🇰",
-		"SE": "<tspan class='countryname'>Sweden </tspan>🇸🇪",
-		"BE": "<tspan class='countryname'>Belgium </tspan>🇧🇪",
-		"FI": "<tspan class='countryname'>Finland </tspan>🇫🇮",
-		"UK": "<tspan class='countryname'>UK </tspan>🇬🇧",
-		"FR": "<tspan class='countryname'>France </tspan>🇫🇷",
-		"IT": "<tspan class='countryname'>Italy </tspan>🇮🇹",
-		"MT": "<tspan class='countryname'>Malta </tspan>🇲🇹",
-		"ES": "<tspan class='countryname'>Spain </tspan>🇪🇸",
-		"CZ": "<tspan class='countryname'>Czechia </tspan>🇨🇿",
-		"CY": "<tspan class='countryname'>Cyprus </tspan>🇨🇾",
-		"SI": "<tspan class='countryname'>Slovenia </tspan>🇸🇮",
-		"PT": "<tspan class='countryname'>Portugal </tspan>🇵🇹",
-		"SK": "<tspan class='countryname'>Slovakia </tspan>🇸🇰",
-		"EE": "<tspan class='countryname'>Estonia </tspan>🇪🇪",
-		"LT": "<tspan class='countryname'>Lithuania </tspan>🇱🇹",
-		"EL": "<tspan class='countryname'>Greece </tspan>🇬🇷",
-		"PL": "<tspan class='countryname'>Poland </tspan>🇵🇱",
-		"HU": "<tspan class='countryname'>Hungary </tspan>🇭🇺",
-		"LV": "<tspan class='countryname'>Latvia </tspan>🇱🇻",
-		"HR": "<tspan class='countryname'>Croatia </tspan>🇭🇷",
-		"RO": "<tspan class='countryname'>Romania </tspan>🇷🇴",
-		"BG": "<tspan class='countryname'>Bulgaria </tspan>🇧🇬"
+		"Philadelphia": "<tspan class='countryname'>Philadelphia </tspan>🇱🇺",
+		"Chester": "<tspan class='countryname'>Chester </tspan>🇮🇪",
+		"Montgomery": "<tspan class='countryname'>Montgomery </tspan>🇳🇱",
+		"Delaware": "<tspan class='countryname'>Delaware </tspan>🇦🇹",
+		"Bucks": "<tspan class='countryname'>Bucks </tspan>🇩🇪"
 	}
 
  
@@ -101,15 +78,15 @@ function init() {
 									.delay((d, i) => i*100)
 									.style("fill-opacity", 0)
 									.style("pointer-events", "none");
-								title.text("EU regions, by economic development")
+								title.text("Great Philadelphia ZCTAs")
 							}
 							if(step.index == 0 && step.direction == "up"){
-								title.text("EU countries, by economic development")
+								title.text("Greater Philadelphia Counties")
 								countries.transition().duration(1000)
 									.delay((d, i) => i*100)
 									.style("fill-opacity", 1);
 							}
-							if(step.index == 4 && step.direction == "down"){
+							if(step.index == 2 && step.direction == "down"){
 								scaleLegendCells();
 								landsilhouette.transition().duration(2000).style("opacity", 0);
 								othercaps.transition().duration(2000).style("opacity", 0);
@@ -210,7 +187,7 @@ function init() {
 									;
 
 							}
-							if(step.index == 3 && step.direction == "up"){
+							if(step.index == 1 && step.direction == "up"){
 								d3.select("#average-two").remove();
 								d3.select("#threshold75").remove();
 								d3.select("#threshold90").remove();
@@ -267,7 +244,7 @@ function init() {
 						const devscale = d3.scaleThreshold()
 							.domain([41626, 50417, 57857, 67438, 83658])
 							.range(['#c51b7d','#e9a3c9','#fde0ef','#e6f5d0','#a1d76a','#4d9221']) //Colorbrewer PiYG
-						devscale.labels = ["less developed", "", "", "", "", "more developed"];
+						devscale.labels = ["lower income", "", "", "", "", "higher income"];
 						const absfundScale = d3.scaleThreshold()
 							.domain([500000000, 1000000000, 2000000000, 3000000000, 5000000000])
 							.range(["#5B3794","#8F4D9F","#B76AA8","#D78CB1","#F1B1BE","#F8DCD9"].reverse());//RdPu
@@ -426,7 +403,7 @@ function init() {
 							.attr("y", 20 + marginTitleLegend)
 							.attr("class", "tk-atlas")
 							.attr("id", "title")
-							.text("EU countries, by economic development");
+							.text("Greater Philadelphia Counties");
 
 						//Dot animations
 						let drawAnimation = function(countrycode, region1ID, region2ID, oldvalue, oldregionID, countryNameEmoji){

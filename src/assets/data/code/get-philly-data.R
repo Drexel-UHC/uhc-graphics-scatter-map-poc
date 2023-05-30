@@ -40,19 +40,27 @@
     group_by(county,fip) %>% 
     summarize(gdppps17 = median(gdppps17)) %>% 
     ungroup()  
+  
+  df_acs %>% 
+    filter(!is.na(median_income)) %>% 
+    pull(median_income) %>% 
+    quantile(probs = seq(0, 1, by = 1/6))
 }
+
 
 { # Boundaries -------------------------------------------------------------------------
   { # land --------------------------------------------------------------------
     
-    sf_land <- states(cb = TRUE, 
-                      resolution = "20m", 
+    sf_land <- states(cb =T, 
+                      resolution = "5m", 
                       class = "sf") %>%
       filter(STUSPS == "PA") %>% 
       mutate(FID = 1) %>% 
       select(FID)
-    
-    sf_land %>% 
+   
+    sf_land_minus_water = sf_land %>%
+      tigris::erase_water() 
+    sf_land_minus_water %>% 
       leaflet() %>% 
       addTiles() %>% 
       addPolygons()
