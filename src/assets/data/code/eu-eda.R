@@ -1,4 +1,4 @@
-{ # 1. Capital centroids -----------------------------------------------------
+{ # 1. Capital centroids/data  -----------------------------------------------------
 
   file = 'capitals-gdppps17' 
   in_file = glue("{file}.json")
@@ -24,8 +24,9 @@
                driver = "GeoJSON")
     
     ## Test expport
-    geojson_read(out_file, what = "sp") %>% 
-      st_as_sf(coords = c("longitude", "latitude")) %>% 
+    sf_tmp = geojson_read(out_file, what = "sp") %>% 
+      st_as_sf(coords = c("longitude", "latitude"))
+    sf_tmp %>% 
       leaflet() %>%
       addTiles() %>% 
       addCircleMarkers()
@@ -57,7 +58,9 @@
     sf_data %>% st_write(out_file, driver = "GeoJSON")
     
     ## Test expport
-    geojson_read(out_file, what = "sp") %>% 
+    sf_tmp = geojson_read(out_file, what = "sp") %>% 
+      st_as_sf()
+    sf_tmp %>% 
       leaflet() %>%
       addTiles() %>% 
       addPolygons()
@@ -65,7 +68,7 @@
   
 }
 
-{ # 3. Country boundaries -----------------------------------------------------
+{ # 3. Country boundaries/data -----------------------------------------------------
 
   file = 'nuts0_gdppps17_topo' 
   in_file = glue("{file}.json")
@@ -89,9 +92,9 @@
     sf_data %>% st_write(out_file, driver = "GeoJSON")
 
     ## Test expport
-
-    sf_data_tmp  <-  geojson_read(out_file, what = "sp") 
-    sf_data_tmp %>% 
+    sf_tmp = geojson_read(out_file, what = "sp") %>% 
+      st_as_sf()
+    sf_tmp %>% 
       leaflet() %>%
       addTiles() %>% 
       addPolygons()
@@ -99,7 +102,7 @@
 }
 
 
-{ # 4. Region boundaries -----------------------------------------------------
+{ # 4. Region boundaries/data -----------------------------------------------------
   #'  nuts2_gdppps17_topo.json
   file = 'nuts2_gdppps17_topo' 
   in_file = glue("{file}.json")
@@ -124,7 +127,8 @@
     
     ## Test expport
     
-    sf_data_tmp  <-  geojson_read(out_file, what = "sp") 
+    sf_data_tmp  <-  geojson_read(out_file, what = "sp") %>% 
+      st_as_sf()
     sf_data_tmp %>% 
       leaflet() %>%
       addTiles() %>% 
