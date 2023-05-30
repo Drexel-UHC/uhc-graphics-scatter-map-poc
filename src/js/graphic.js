@@ -71,14 +71,14 @@ function init() {
 
 	const capitalRegions = ["AT13","BE10","BG41","CY00","CZ01","DE30","EL30","DK01","EE00","ES30","FI1B", "FR10","HR04","HU11","IE06","LU00","LV00","MT00","NL32","ITI4","LT01","PL91","PT17","SI04","SK01","RO32","SE11","UKI4"];
 
-	d3.json("assets/data/nuts2_gdppps17_topo-RL.geojson", function(nuts2) {
-		d3.json("assets/data/nuts0_gdppps17_topo-RL.geojson", function(nuts0) {
-			d3.json("assets/data/land-RL.geojson", function(land) {
-				d3.json("assets/data/capitals-gdppps17-RL.geojson", function (capitals) {
-	// d3.json("assets/data/nuts2_gdppps17_topo-RL.json", function(nuts2) {
-	// 	d3.json("assets/data/nuts0_gdppps17_topo.json", function(nuts0) {
-	// 		d3.json("assets/data/land.json", function(land) {
-	// 			d3.json("assets/data/capitals-gdppps17.json", function(capitals) {
+	// d3.json("assets/data/nuts2_gdppps17_topo-RL.geojson", function(nuts2) {
+	// 	d3.json("assets/data/nuts0_gdppps17_topo-RL.geojson", function(nuts0) {
+	// 		d3.json("assets/data/land-RL.geojson", function(land) {
+	// 			d3.json("assets/data/capitals-gdppps17-RL.geojson", function (capitals) {
+					d3.json("assets/data/sf_zcta.geojson", function (nuts2) {
+						d3.json("assets/data/sf_county.geojson", function (nuts0) {
+							d3.json("assets/data/sf_land.geojson", function (land) {
+								d3.json("assets/data/sf_capital.geojson", function (capitals) {
 						/* Scrollama */
 						const scroller = scrollama();
 						scroller.setup({
@@ -265,7 +265,7 @@ function init() {
 					}
 					
 						const devscale = d3.scaleThreshold()
-							.domain([75, 90, 100, 110, 125])
+							.domain([41626, 50417, 57857, 67438, 83658])
 							.range(['#c51b7d','#e9a3c9','#fde0ef','#e6f5d0','#a1d76a','#4d9221']) //Colorbrewer PiYG
 						devscale.labels = ["less developed", "", "", "", "", "more developed"];
 						const absfundScale = d3.scaleThreshold()
@@ -273,7 +273,7 @@ function init() {
 							.range(["#5B3794","#8F4D9F","#B76AA8","#D78CB1","#F1B1BE","#F8DCD9"].reverse());//RdPu
 						absfundScale.labels = ["<50m €", "50-100m", "100-200m", "200-300m", "300-500m", ">500m €"];
 						const percapitafundScale = d3.scaleThreshold()
-							.domain([25, 50, 75, 125, 200])
+							.domain([41626, 50417, 57857, 67438, 83658])
 							.range(["#5B3794","#8F4D9F","#B76AA8","#D78CB1","#F1B1BE","#F8DCD9"].reverse());//RdPu
 						percapitafundScale.labels = ["<25 €/cap/y", "25-50", "50-75", "75-125", "125-200", ">200 €/cap/y"];
 						const fundpercgdpScale = d3.scaleThreshold()
@@ -281,9 +281,9 @@ function init() {
 							.range(["#5B3794","#8F4D9F","#B76AA8","#D78CB1","#F1B1BE","#F8DCD9"].reverse());//RdPu
 						fundpercgdpScale.labels = ["<1% gdp", "1-2", "2-3", "3-4", "4-5", ">5% gdp"];
 
-					let geojsonNUTS2 = nuts2;
-					let geojsonNUTS0 = nuts0;
-					geojsonNUTS0.features = geojsonNUTS0.features.sort(function (x, y) {
+						let geojsonNUTS2 = nuts2;
+						let geojsonNUTS0 = nuts0;
+						geojsonNUTS0.features = geojsonNUTS0.features.sort(function (x, y) {
 							return d3.descending(+x.properties.gdppps17, +y.properties.gdppps17)
 						})
 						let countrycodes = geojsonNUTS0.features.map((country) => country.properties.CNTR_CODE);
@@ -311,7 +311,8 @@ function init() {
 							'type': 'Feature',
 							'geometry': {
 							'type': 'Polygon',
-							'coordinates': [[[0, 70], [35, 70], [0, 35], [35, 35]]]
+							'coordinates': [[[40, 70], [39, 76], [39, 74], [40, 75]]]
+							// 'coordinates': [[[0, 70], [35, 70], [0, 35], [35, 35]]]
 							}
 						}
 						projection.fitExtent([[mapPadding, mapPadding + 25], [width - mapPadding, height - mapPadding]], extent);
