@@ -67,43 +67,18 @@ function init() {
 		"BG": "<tspan class='countryname'>Bulgaria </tspan>🇧🇬"
 	}
 
-	const emojiflagsMobile = {
-		"LU": "<tspan class='countryname'>LUX </tspan>🇱🇺",
-		"IE": "<tspan class='countryname'>IRL </tspan>🇮🇪",
-		"NL": "<tspan class='countryname'>NLD </tspan>🇳🇱",
-		"AT": "<tspan class='countryname'>AUT </tspan>🇦🇹",
-		"DE": "<tspan class='countryname'>DEU </tspan>🇩🇪",
-		"DK": "<tspan class='countryname'>DNK </tspan>🇩🇰",
-		"SE": "<tspan class='countryname'>SWE </tspan>🇸🇪",
-		"BE": "<tspan class='countryname'>BEL </tspan>🇧🇪",
-		"FI": "<tspan class='countryname'>FIN </tspan>🇫🇮",
-		"UK": "<tspan class='countryname'>GBR </tspan>🇬🇧",
-		"FR": "<tspan class='countryname'>FRA </tspan>🇫🇷",
-		"IT": "<tspan class='countryname'>ITA </tspan>🇮🇹",
-		"MT": "<tspan class='countryname'>MLT </tspan>🇲🇹",
-		"ES": "<tspan class='countryname'>ESP </tspan>🇪🇸",
-		"CZ": "<tspan class='countryname'>CZE </tspan>🇨🇿",
-		"CY": "<tspan class='countryname'>CYP </tspan>🇨🇾",
-		"SI": "<tspan class='countryname'>SVN </tspan>🇸🇮",
-		"PT": "<tspan class='countryname'>PRT </tspan>🇵🇹",
-		"SK": "<tspan class='countryname'>SVK </tspan>🇸🇰",
-		"EE": "<tspan class='countryname'>EST </tspan>🇪🇪",
-		"LT": "<tspan class='countryname'>LTU </tspan>🇱🇹",
-		"EL": "<tspan class='countryname'>GRC </tspan>🇬🇷",
-		"PL": "<tspan class='countryname'>POL </tspan>🇵🇱",
-		"HU": "<tspan class='countryname'>HUN </tspan>🇭🇺",
-		"LV": "<tspan class='countryname'>LVA </tspan>🇱🇻",
-		"HR": "<tspan class='countryname'>HRV </tspan>🇭🇷",
-		"RO": "<tspan class='countryname'>ROU </tspan>🇷🇴",
-		"BG": "<tspan class='countryname'>BGR </tspan>🇧🇬"
-	}
+ 
 
 	const capitalRegions = ["AT13","BE10","BG41","CY00","CZ01","DE30","EL30","DK01","EE00","ES30","FI1B", "FR10","HR04","HU11","IE06","LU00","LV00","MT00","NL32","ITI4","LT01","PL91","PT17","SI04","SK01","RO32","SE11","UKI4"];
 
-	d3.json("assets/data/nuts2_gdppps17_topo.json", function(nuts2) {
-		d3.json("assets/data/nuts0_gdppps17_topo.json", function(nuts0) {
-			d3.json("assets/data/land.json", function(land) {
-				d3.json("assets/data/capitals-gdppps17.json", function(capitals) {
+	d3.json("assets/data/nuts2_gdppps17_topo-RL.geojson", function(nuts2) {
+		d3.json("assets/data/nuts0_gdppps17_topo-RL.geojson", function(nuts0) {
+			d3.json("assets/data/land-RL.geojson", function(land) {
+				d3.json("assets/data/capitals-gdppps17-RL.geojson", function (capitals) {
+	// d3.json("assets/data/nuts2_gdppps17_topo-RL.json", function(nuts2) {
+	// 	d3.json("assets/data/nuts0_gdppps17_topo.json", function(nuts0) {
+	// 		d3.json("assets/data/land.json", function(land) {
+	// 			d3.json("assets/data/capitals-gdppps17.json", function(capitals) {
 						/* Scrollama */
 						const scroller = scrollama();
 						scroller.setup({
@@ -186,20 +161,20 @@ function init() {
 									.call(yAxis).lower();
 
 								// if(!flagsBuilt){
-									let ticksYAxisImage = d3.selectAll(".y-axis .tick")
-										.append("image")
-										.attr("xlink:href",function(){
-											console.log(d3.select(this.parentNode).text().toLowerCase());
-											return "assets/img/flags_png/"+(d3.select(this.parentNode).text().toLowerCase())+".png"
-										})
-										.attr("width",15)
-										.attr("height",function(){
-											return Math.round(15*.67);
-										})
-										.style("opacity", 0).transition().delay(3000).duration(1000)
-										.style("opacity", 1)
+									// let ticksYAxisImage = d3.selectAll(".y-axis .tick")
+									// 	.append("image")
+									// 	.attr("xlink:href",function(){
+									// 		console.log(d3.select(this.parentNode).text().toLowerCase());
+									// 		return "assets/img/flags_png/"+(d3.select(this.parentNode).text().toLowerCase())+".png"
+									// 	})
+									// 	.attr("width",15)
+									// 	.attr("height",function(){
+									// 		return Math.round(15*.67);
+									// 	})
+									// 	.style("opacity", 0).transition().delay(3000).duration(1000)
+									// 	.style("opacity", 1)
 
-										;
+									// 	;
 								// 	flagsBuilt = true;
 								// }
 
@@ -210,10 +185,11 @@ function init() {
 
 								let ticksYAxis = d3.selectAll(".y-axis .tick text")
 									.html(function(){
-										if(contentWidth < 768){
-											return emojiflagsMobile[d3.select(this).text()]
-										}
+										// if(contentWidth < 768){
+										// 	return emojiflagsMobile[d3.select(this).text()]
+										// }
 										return emojiflags[d3.select(this).text()]
+							 
 									})
 									.style("opacity", 0).transition().delay(3000).duration(1000)
 									.style("opacity", 1)
@@ -286,231 +262,8 @@ function init() {
 										return fromCircle(devLinearScale(+d.properties.gdppps17), countryScale(d.properties.CNTR_CODE), 6, path(d.geometry));
 									});
 							}
-							if(step.index == 5 && step.direction == "down"){
-								d3.select("#average-two").remove();
-								d3.selectAll("#average").remove();
-
-								let average = mapOne.insert("g", "path.region")
-									.attr("id", "average")
-									.attr("transform", `translate(${devLinearScale(100)}, 0)`);
-								average.append("line")
-									.attr("x1", 0)
-									.attr("x2", 0)
-									.attr("y1", margin.top)
-									.attr("y2", height - 32)
-									.style("stroke-width", 1)
-									.style("stroke", "#000000");
-								average.append('text')
-									.attr("x", 0)
-									.attr("y", height - 20)
-									.text(100)
-									.style("text-anchor", "middle")
-									.style("fill", "#000000")
-									.attr("class", "label-outside tk-atlas");
-							}
-							if(step.index == 4 && step.direction == "up"){
-								d3.select("#average").remove();
-								d3.select("#average-two").remove();
-							}
-							if(step.index == 6 && step.direction == "down"){
-								highlightRegions(["UKI3"])
-								d3.selectAll("#arrow").remove();
-								let arrow  = mapOne.append("g")
-									.attr("id", "arrow")
-									.attr("transform", `translate(${devLinearScale(626) - 40}, ${countryScale("UK") - 40})`)
-								arrow.append("line")
-        							.attr("x1", 0)
-        							.attr("y1", 0)
-        							.attr("x2", 30)
-        							.attr("y2", 30)
-        							.attr("stroke-width", 2)
-        							.attr("stroke", "black")
-									.attr("marker-end", "url(#triangle)");
-								arrow.append("text")
-									.attr("x", 0)
-									.attr("y", -6)
-									.text("Inner London - West")
-									.style("text-anchor", "middle")
-									.attr("class", "tk-atlas annotation");
-							}
-							if(step.index == 5 && step.direction == "up"){
-								dehighlightRegions();
-								d3.select("#arrow").remove();
-							}
-							if(step.index == 7 && step.direction == "down"){
-								dehighlightRegions();
-								devLinearScale.domain([20, 260])
-								scaleLegendCells();
-								d3.select("#arrow").transition().duration(2000)
-									.attr("transform", `translate(${devLinearScale(626) - 40}, ${countryScale("UK") - 40})`)
-								regions.transition().duration(2000)
-									.attrTween("d", function(d){
-									return toCircle(d3.select(this).attr("d"), devLinearScale(+d.properties.gdppps17), 	countryScale(d.properties.CNTR_CODE), 6);
-									});
-								countries.transition().duration(2000)
-									.attrTween("d", function(d){
-									return toRect(d3.select(this).attr("d"), devLinearScale(+d.properties.gdppps17) - 6, countryScale(d.properties.CNTR_CODE) - 6, 12, 12);
-									});
-								d3.select("#average")
-									.transition().duration(2000)
-									.attr("transform", `translate(${devLinearScale(100)}, 0)`);
-								eucaps.transition().duration(2000)
-									.attr("cx", (d) => devLinearScale(+d.properties.gdppps17));
-							}
-							if(step.index == 6 && step.direction == "up"){
-								d3.select("#average-two").remove();
-								devLinearScale.domain([20, d3.max(geojsonNUTS2.features, (d) => +d.properties.gdppps17)]);
-								scaleLegendCells();
-								d3.select("#arrow").transition().duration(2000)
-									.attr("transform", `translate(${devLinearScale(610) - 40}, ${countryScale("UK") - 40})`);
-								d3.select("#average").transition().duration(2000)
-									.attr("transform", `translate(${devLinearScale(100)}, 0)`);
-								regions.transition().duration(2000)
-									.attrTween("d", function(d){
-										return toCircle(d3.select(this).attr("d"), devLinearScale(+d.properties.gdppps17), countryScale	(d.properties.CNTR_CODE), 6);
-									});
-								countries.transition().duration(2000)
-									.attrTween("d", function(d){
-										return toRect(d3.select(this).attr("d"), devLinearScale(+d.properties.gdppps17) - 	6, countryScale(d.properties.CNTR_CODE) - 6, 12, 12);
-									});
-								eucaps.transition().duration(2000)
-									.attr("cx", (d) => devLinearScale(+d.properties.gdppps17));
-							}
-							//Add lines for thresholds
-							if(step.index == 8 && step.direction == "down"){
-								let threshold75 = mapOne.insert("g", "path.region")
-									.attr("id", "threshold75")
-									.attr("transform", `translate(${devLinearScale(75)}, 0)`);
-								threshold75.append('line')
-									.attr("x1", 0)
-									.attr("x2", 0)
-									.attr("y1", legendy + marginTitleLegend)
-									.attr("y2", height - 32)
-									.style("stroke-width", 1)
-									.style("stroke", devscale(74));
-								threshold75.append('text')
-									.attr("x", 0)
-									.attr("y", height - 20)
-									.text(75)
-									.style("text-anchor", "end")
-									.style("fill", devscale(74))
-									.attr("class", "label-outside tk-atlas");
-								threshold75.append("rect")
-									.attr("x", -(devLinearScale(75) - devLinearScale(20)))
-									.attr("y", legendy + legendHeight + marginTitleLegend)
-									.attr("width", devLinearScale(75) - devLinearScale(20))
-									.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-									.style("fill", devscale(74))
-									.style("opacity", 0.1);
-								let threshold90 = mapOne.insert("g", "path.region")
-									.attr("id", "threshold90")
-									.attr("transform", `translate(${devLinearScale(90)}, 0)`);
-								threshold90.append('line')
-									.attr("x1", 0)
-									.attr("x2", 0)
-									.attr("y1", legendy + marginTitleLegend)
-									.attr("y2", height - 32)
-									.style("stroke-width", 1)
-									.style("stroke", devscale(89));
-								threshold90.append('text')
-									.attr("x", 0)
-									.attr("y", height - 20)
-									.text(90)
-									.style("text-anchor", "end")
-									.style("fill", d3.color(devscale(89)).darker(2).toString())//d3.color(devscale(89)))
-									.attr("class", "label-outside tk-atlas");
-								threshold90.append("rect")
-									.attr("x", -(devLinearScale(90) - devLinearScale(75)))
-									.attr("y", legendy + legendHeight + marginTitleLegend)
-									.attr("width", devLinearScale(90) - devLinearScale(75))
-									.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-									.style("fill", devscale(89))
-									.style("opacity", 0.1);
-
-								// mapOne.insert("rect", "path.region")
-								// 	.attr("id", "threshold100")
-								// 	.attr("x", devLinearScale(100) - (devLinearScale(100) - devLinearScale(90)))
-								// 	.attr("y", legendy + legendHeight)
-								// 	.attr("width", devLinearScale(100) - devLinearScale(90))
-								// 	.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-								// 	.style("fill", devscale(99))
-								// 	.style("opacity", 0.1);
-
-								let threshold110 = mapOne.insert("g", "path.region")
-									.attr("id", "threshold110")
-									.attr("transform", `translate(${devLinearScale(110)}, 0)`);
-
-								threshold110.append("rect")
-									.attr("x", -(devLinearScale(110) - devLinearScale(100)))
-									.attr("y", legendy + legendHeight + marginTitleLegend)
-									.attr("width", devLinearScale(110) - devLinearScale(100))
-									.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-									.style("fill", devscale(109))
-									.style("opacity", 0.2);
-
-								threshold110.append('line')
-									.attr("x1", 0)
-									.attr("x2", 0)
-									.attr("y1", legendy + marginTitleLegend)
-									.attr("y2", height - 32)
-									.style("stroke-width", 1)
-									.style("stroke", d3.color(devscale(109)).darker(1).toString());
-
-								threshold110.append('text')
-									.attr("x", 0)
-									.attr("y", height - 20)
-									.text(110)
-									.style("text-anchor", "start")
-									.style("fill", d3.color(devscale(109)).darker(2).toString())//d3.color(devscale(89)))
-									.attr("class", "label-outside tk-atlas");
-
-								let threshold125 = mapOne.insert("g", "path.region")
-									.attr("id", "threshold125")
-									.attr("transform", `translate(${devLinearScale(125)}, 0)`);
-
-								threshold125.append("rect")
-									.attr("x", -(devLinearScale(125) - devLinearScale(110)))
-									.attr("y", legendy + legendHeight + marginTitleLegend)
-									.attr("width", devLinearScale(125) - devLinearScale(110))
-									.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-									.style("fill", devscale(124))
-									.style("opacity", 0.1);
-
-								threshold125.append('line')
-									.attr("x1", 0)
-									.attr("x2", 0)
-									.attr("y1", legendy + marginTitleLegend)
-									.attr("y2", height - 32)
-									.style("stroke-width", 1)
-									.style("stroke", devscale(124));
-
-								threshold125.append('text')
-									.attr("x", 0)
-									.attr("y", height - 20)
-									.text(125)
-									.style("text-anchor", "start")
-									.style("fill", d3.color(devscale(124)).darker(2).toString())//d3.color(devscale(89)))
-									.attr("class", "label-outside tk-atlas");
-
-								mapOne.insert("rect", "path.region")
-									.attr("id", "threshold600")
-									.attr("x", devLinearScale(600) - (devLinearScale(600) - devLinearScale(125)))
-									.attr("y", legendy + legendHeight + marginTitleLegend)
-									.attr("width", devLinearScale(600) - devLinearScale(125))
-									.attr("height", height - margin.top - margin.bottom + legendy + countryScale.step()/2 -marginTitleLegend)
-									.style("fill", devscale(126))
-									.style("opacity", 0.2);
-							}
-							if(step.index == 7 && step.direction == "up"){
-								d3.select("#average-two").remove();
-								d3.select("#threshold75").remove();
-								d3.select("#threshold90").remove();
-								d3.select("#threshold100").remove();
-								d3.select("#threshold110").remove();
-								d3.select("#threshold125").remove();
-								d3.select("#threshold600").remove();
-							}
-						}
+					}
+					
 						const devscale = d3.scaleThreshold()
 							.domain([75, 90, 100, 110, 125])
 							.range(['#c51b7d','#e9a3c9','#fde0ef','#e6f5d0','#a1d76a','#4d9221']) //Colorbrewer PiYG
@@ -528,9 +281,9 @@ function init() {
 							.range(["#5B3794","#8F4D9F","#B76AA8","#D78CB1","#F1B1BE","#F8DCD9"].reverse());//RdPu
 						fundpercgdpScale.labels = ["<1% gdp", "1-2", "2-3", "3-4", "4-5", ">5% gdp"];
 
-						let geojsonNUTS2 = topojson.feature(nuts2, nuts2.objects.foo);
-						let geojsonNUTS0 = topojson.feature(nuts0, nuts0.objects.foo);
-						geojsonNUTS0.features = geojsonNUTS0.features.sort(function(x, y){
+					let geojsonNUTS2 = nuts2;
+					let geojsonNUTS0 = nuts0;
+					geojsonNUTS0.features = geojsonNUTS0.features.sort(function (x, y) {
 							return d3.descending(+x.properties.gdppps17, +y.properties.gdppps17)
 						})
 						let countrycodes = geojsonNUTS0.features.map((country) => country.properties.CNTR_CODE);
